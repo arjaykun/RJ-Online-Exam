@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Auth\Access\Response;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -29,7 +30,7 @@ class AuthServiceProvider extends ServiceProvider
 
 
         Gate::define('activate-test', function($user, $test) {
-            return ($user->id == $test->klass->user_id) || $user->is_superadmin;
+            return ($user->id == $test->klass->user_id || $user->is_superadmin) && $test->active == 0;
         });
 
         Gate::define('enroll_student', function($user, $class) {
@@ -43,6 +44,12 @@ class AuthServiceProvider extends ServiceProvider
 
         Gate::define('take_test', function($user, $test) {
             return $user->is_student && $test->active && $test->klass->student_profiles->contains('user_id', $user->id) && !$test->grades->contains('user_id', $user->id);
+        }); 
+
+        Gate::define('launch_class', function($user, $class) {
+            return $user->is_student && $class->end_date->greaterThanOrEqualTo($class->created_at) && $class->student_profiles->contains('user_id', $user->id)
+             ? Response::allow()
+                : Response::deny('Unauthorized Access! You\'re either not enrolled in this class or the class has already ened.');
         }); 
     }
 }

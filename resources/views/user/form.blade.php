@@ -35,7 +35,7 @@
 	</div>
 
 </div>
-@if (!$user)
+@if (empty($user->id))
   <div class="form-group row">
     <div class="col-sm-6 mb-6 mb-sm-0">
       <label for="password">Password (optional)</label>
@@ -46,7 +46,7 @@
 
    <div class="col-sm-6 mb-6 mb-sm-0">
        <label for="password_confirmation">Confirm Password (optional)</label>
-       <input type="password" class="form-control form-control id="password_confirmation" placeholder="Enter Password Again" autocomplete="off" name="password_confirmation">
+       <input type="password" class="form-control form-control" id="password_confirmation" placeholder="Enter Password Again" autocomplete="off" name="password_confirmation">
     </div>
 
   </div>

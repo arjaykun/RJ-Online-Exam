@@ -6,14 +6,18 @@ use Illuminate\Http\Request;
 
 class NotificationController extends Controller
 {
-		public function __construct() {
-			$this->middleware('auth');
-		}
+	public function __construct() {
+		$this->middleware('auth');
+	}
 
-		public function index(\App\Klass $class) {
+	public function index(\App\Klass $class) {
 
-			return view('main.notification.index', compact('class'));
-		}
+		return view('main.notification.index', compact('class'));
+	}
+
+    public function admin_index(\App\Klass $class) {
+        return view('admin.notification.index');
+    }
 
     public function read() {
     	auth()->user()->unreadNotifications->markAsRead();

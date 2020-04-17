@@ -7,7 +7,7 @@
 
 <div class="card position-relative">
  <div class="card-header py-3 d-flex justify-content-between align-items-center">
-    <h6 class="m-0 font-weight-bold text-primary">{{ ucwords($test->title) }}</h6>
+    <h6 class="m-0 font-weight-bold text-primary">{{ ucwords($test->title) }} ({{ $test->time }} mins.)</h6>
     <div class="d-flex">
 
        <a href="{{ $class->path() }}" class="btn btn-sm btn-primary btn-circle mr-2"><i class="fas fa-arrow-left"> </i></a>
@@ -20,22 +20,20 @@
     </div>
   </div>
   <div class="card-body">
-
+    @include('layouts.messages')
     <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap">
       <h3>Questions</h3>
       <div class="d-flex align-items-center">
-
-                          
+               
         @if ($test->active == 1)
-          <form action="{{ route('deactivate_test', ['class' => $class->id,'test' => $test->id]) }}" method="post">
-           @csrf
-           <button class="btn btn-danger mr-2" type="submit">Dectivate Test  <i class="fas fa-key"> </i></button>
-        </form>
+       
+           <button class="btn btn-danger mr-2" disabled>
+             @datetime($test->deadline) -  {{ $test->deadline->diffForHumans() }}
+           </button>
+
         @else
-           <form action="{{ route('activate_test', ['class' => $class->id,'test' => $test->id]) }}" method="post">
-             @csrf
-             <button class="btn btn-success mr-2" type="submit">Activate Test  <i class="fas fa-key"> </i></button>
-          </form>
+           <a href="{{ route('activate_test', ['class' => $class->id, 'test'=> $test->id]) }}" 
+            class="btn btn-success mr-2" type="submit">Activate Test <i class="fas fa-key"> </i></a>
         @endif
         
         <a href="{{ route('test_grades', ['class' => $class->id, 'test'=> $test->id]) }}" class="btn btn-warning mr-2" >View Grades <i class="fas fa-percentage"></i></a>

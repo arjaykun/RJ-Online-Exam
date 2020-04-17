@@ -1,4 +1,4 @@
-<div class="form-group">
+ <div class="form-group">
   <label for="desc">Question</label>
  <input type="text" class="form-control form-control @error('question.question') is-invalid @enderror " id="desc" placeholder="Enter Test Question" autocomplete="off" name="question[question]"  value="{{ old('question.question') ??  $question->question }}">
  <div class="text-danger">@error('question.question') The question field is required. @enderror </div>
@@ -29,7 +29,7 @@
 
 	{{-- Choice 2 --}}
 	<div class="form-group">
-	  <label for="desc">Choice #2</label>
+	  <label for="desc">Choice #2 (optional)</label>
 	 <input type="text" class="form-control form-control @error('choices.2.choice') is-invalid @enderror " id="desc" placeholder="Enter Choice #2" autocomplete="off" name="choices[2][choice]"  value="{{ $question->choices[2]->choice ?? old('choices.2.choice')  }}">
 	 <input type="hidden" name="choices[2][correct]" value="0">
 
@@ -38,7 +38,7 @@
 
 	{{-- Choice 3 --}}
 	<div class="form-group">
-	  <label for="desc">Choice #3</label>
+	  <label for="desc">Choice #3 (optional)</label>
 	 <input type="text" class="form-control form-control @error('choices.3.choice') is-invalid @enderror " id="desc" placeholder="Enter  Choice #3" autocomplete="off" name="choices[3][choice]"  value="{{ $question->choices[3]->choice ?? old('choices.3.choice')  }}">
 	 <input type="hidden" name="choices[3][correct]" value="0">
 

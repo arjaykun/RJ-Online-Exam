@@ -10,7 +10,7 @@
     <div class="card">
       <a class="dropdown-item d-flex align-items-center" 
 
-          @if($notification->type == "App\Notifications\TestActivatedNotification" ) href="{{ route('student_tests.index', ['class' => $class]) }}" @endif
+          @if($notification->type == "App\Notifications\TestActivatedNotification" ) href="{{ route('student_tests.index', ['class' => $notification->data['class']]) }}" @endif
       >
         <div class="card-body d-flex justify-content-between align-items-center ">
           <div>
@@ -27,8 +27,8 @@
     @endforeach
 
     <div class="my-2 d-flex justify-content-center align-items-center">
-      <a href="{{ route('read_notification', ['class' => $class->id]) }}" class="mx-2">Mark All as Read</a> | 
-      <a href="{{ route('delete_notifications', ['class' => $class->id]) }}" class="mx-2">Delete All</a>
+      <a href="{{ route('read_notification') }}" class="mx-2">Mark All as Read</a> | 
+      <a href="{{ route('delete_notifications') }}" class="mx-2">Delete All</a>
     </div>   
   
   @else

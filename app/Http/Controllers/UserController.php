@@ -24,6 +24,7 @@ class UserController extends Controller
 		$this->authorize('create', User::class);
 
 		$user = new User();
+	
 
 		return view('user.create', ['user' => $user ]);
 	}

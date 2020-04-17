@@ -128,6 +128,7 @@ class KlassController extends Controller
             'section' => 'required|max:10|alpha_dash',
             'subject_code' => 'required|max:20|alpha_dash',
             'subject_description' => 'required',
+            'end_date' => 'required|date'
         ]);
     }
 }

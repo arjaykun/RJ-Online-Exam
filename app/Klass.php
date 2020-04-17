@@ -13,6 +13,10 @@ class Klass extends Model
         'section' => UpperCase::class,
         'subject_code' => UpperCase::class,
     ];
+
+    protected $dates = [
+        'end_date',
+    ];
  
     public function getSubjectDescriptionAttribute($value){
         return ucwords($value);

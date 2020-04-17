@@ -13,10 +13,7 @@
    // Call the dataTables jQuery plugin
     $(document).ready(function() {
       $('#dataTable').DataTable({
-        "order": [],
-         "columnDefs": [
-            { "orderable": false, "targets": [4]}
-          ]
+        "order": [5]
       });
     });
   </script>
@@ -35,24 +32,26 @@
          <table class="table table-striped table-bordered" id="dataTable">
            <thead>
              <tr>
-               <th>#</th>
                <th>Title</th>
-               <th>Question Count</th>
+               <th>Items</th>
+               <th>Time</th>
                <th>Score</th>
                <th>Grade</th>
                <th>Date Created</th>
+               <th>Deadline</th>
                <th></th>
              </tr>
            </thead>
            <tbody>
              @foreach ($tests as $test)
                <tr>
-                <td>{{ $loop->iteration }}</td>
                  <td>{{ $test->title }}</td>
                  <td>{{ $test->questions_count }}</td>
+                 <td>{{ $test->time }} mins.</td>
                  <td>{{ $test->grades[0]->score ?? 'n/a' }}</td>
                  <td>{{ $test->grades[0]->grade ?? 'n/a'}}</td>
-                 <td>{{ $test->created_at->format('m/d/Y') }}</td>
+                 <td>{{ $test->created_at->format('m/d/Y h:i a') }}</td>
+                 <td>{{ $test->active? $test->deadline->format('m/d/y h:i a') : 'n/a' }}</td>
                  <td>
                   @if ($test->grades->contains('user_id', auth()->user()->id))
                      <button class="btn btn-success btn-sm rounded" disabled>Test Completed</button>

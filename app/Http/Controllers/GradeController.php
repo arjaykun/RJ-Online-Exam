@@ -13,7 +13,8 @@ class GradeController extends Controller
     	$this->middleware('auth');
     }
 
-    public function index(Klass $class) {
+    public function index(Klass $class) {     
+      $this->authorize('launch_class', $class);
     	$user = auth()->user()->id;
     	$tests = $class->tests
         ->loadCount('questions')

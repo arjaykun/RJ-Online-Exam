@@ -19,6 +19,7 @@ class CreateClassesTable extends Migration
             $table->string('section');
             $table->string('subject_code');
             $table->string('subject_description');
+            $table->dateTime('end_date');
             $table->timestamps();
         });
     }

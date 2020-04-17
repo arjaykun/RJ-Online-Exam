@@ -92,7 +92,7 @@ class TestController extends Controller
      */
     public function destroy(Klass $class, Test $test)
     {
-        $this->authorize('view', $delete);
+        $this->authorize('delete', $test);
         $test->delete();
         return redirect()->route('classes.show', ['class' => $class->id])
                     ->with('test_deleted', 'You have successfully deleted a test.');
@@ -102,6 +102,7 @@ class TestController extends Controller
     public function validatedData() {
         return request()->validate([
             'title' => 'required|regex:/^[A-Za-z0-9-\'#&"?! ]+$/',
+            'time' => 'required|numeric'
         ]);
     }
 }

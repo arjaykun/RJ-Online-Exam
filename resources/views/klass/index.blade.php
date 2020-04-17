@@ -16,7 +16,7 @@
       $('#dataTable').DataTable({
         "order": [],
          "columnDefs": [
-            { "orderable": false, "targets": [1,2,3,4,5,7]}
+            { "orderable": false, "targets": [1,2,3,4,7,8]}
           ]
       });
     });
@@ -48,6 +48,8 @@
           <th>Students #</th>
           <th>Tests #</th>
           <th>Creation Date</th>
+          <th>End Date</th>
+          <th>Status</th>
           <th></th>
         </tr>
       </thead>
@@ -62,7 +64,15 @@
               {{ $class->student_profiles_count }}</span></td>
             <td><span class="badge badge-pill badge-dark">
               {{ $class->tests_count }}</span></td>
-            <td>@datetime($class->created_at)</td>
+            <td>{{ $class->created_at->format('m/d/Y') }}</td>
+            <td>{{ $class->end_date->format('m/d/Y') }}</td>
+            <td>
+              @if ($class->end_date->greaterThanOrEqualTo($class->created_at))
+                in progress
+              @else
+                ended  
+              @endif
+            </td>
             <td>
               <div class="btn-group" role="group">
                   <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

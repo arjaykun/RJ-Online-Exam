@@ -17,7 +17,8 @@ class CreateTestsTable extends Migration
             $table->id();
             $table->foreignId('klass_id')->constrained()->onDelete('cascade');
             $table->string('title');
-            $table->integer('active')->default(0);
+            $table->unsignedBigInteger('time');
+            $table->dateTime('deadline')->default(now());
             $table->timestamps();
         });
     }

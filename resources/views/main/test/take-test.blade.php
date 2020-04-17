@@ -26,6 +26,10 @@
 <body>
 	<div class="container">
 	
+	<div class="fixed-top bg-dark text-center text-white py-2">
+		REMAINING TIME: <strong><span id="timer">00:00:00</span> </strong> <i class="fas fa-stopwatch ml-1"></i>
+	</div>
+
 	<div class="jumbotron text-center">
 		<h2><i class="fas fa-registered fa-1x"></i> RJ-Online Exam</h2>
 		<p>
@@ -36,7 +40,7 @@
 		</p>
 	</div>
 	
-	<form method="post" action="{{ route('student_tests.submit',['class' => $test->klass_id, 'test' => $test->id]) }}">
+	<form method="post" action="{{ route('student_tests.submit',['class' => $test->klass_id, 'test' => $test->id]) }}" id="form">
 	@csrf
 	@foreach ($test->questions->shuffle() as $question)
 		<div class="card mt-2">
@@ -69,5 +73,62 @@
 	</form>
 </div>
 </body>
+
+
+<!-- Scripts -->
+<script src="{{ asset('js/app.js') }}"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="{{ asset('js/jquery-easing/jquery.easing.min.js') }}"></script>
+
+ <!-- Custom scripts for all pages-->
+<script src="{{ asset('js/sb-admin-2.min.js') }}"></script>
+
+<script>
+
+	 $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+	let minutes = {{ $timer->remaining_time }};
+	let d = new Date();
+  let deadline = d.setMinutes(d.getMinutes() + minutes);
+
+
+
+	const timer = setInterval( function() {
+
+		let diff = Math.abs(new Date(deadline) - new Date()) / 1000;
+	  let h = (Math.floor(diff / 3600) % 24).toString();
+	  let m = (Math.floor(diff / 60) % 60).toString();
+	  let s = (Math.floor(diff % 60)).toString();
+
+	  if(h == 0 && m == 0 && s==0) {
+			clearInterval(timer);
+			//submit the test here
+			alert('Time is up!');
+			$('#form').submit();
+		
+		} 
+
+		if(s==0) {
+			$.ajax({
+				url: '{{ route('update_test_timer', ['class'=> $test->klass_id, 'test' => $test->id]) }}',
+				method: 'PUT',
+				success: function(data) {
+					console.log('updated');
+				}
+			});
+		}
+
+		$('#timer').text(`${h.padStart(2,'0')}:${m.padStart(2,'0')}:${s.padStart(2,'0')}`);
+
+	}, 1000 );
+
+</script>
+
 </html>
+
 

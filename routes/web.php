@@ -36,7 +36,8 @@ Route::prefix('/admin')->group(function () {
 	Route::get('classes/{class}/grades', 'GradeController@view_class_grades')->name('class_grades');
 
 	//test activation
-	Route::post('classes/{class}/tests/{test}/activate', 'TestActivationController@activate')->name('activate_test');
+	Route::get('classes/{class}/tests/{test}/activate', 'TestActivationController@show')->name('activate_test');
+	Route::put('classes/{class}/tests/{test}/update', 'TestActivationController@activate')->name('update_test');
 	Route::post('classes/{class}/tests/{test}/deactivate', 'TestActivationController@deactivate')->name('deactivate_test');
 
 
@@ -61,6 +62,8 @@ Route::prefix('/admin')->group(function () {
 	//class user
 	Route::resource('users', 'UserController');
 
+	//admin notification
+	Route::get('notifications', 'NotificationController@admin_index')->name('notifications.admin_index');
 
 });
 
@@ -75,16 +78,19 @@ Route::prefix('/{class}')->group( function() {
 	Route::get('tests/{test}/take', 'StudentTestController@show')->name('student_tests.take');
 	Route::post('tests/{test}/submit', 'StudentTestController@submit_test')->name('student_tests.submit');
 	Route::get('tests/{test}/grades/{grade}/assessment', 'StudentTestController@assessment')->name('grade_assessment');
+	Route::put('tests/{test}/update-timer', 'StudentTestController@update_timer')->name('update_test_timer');
 
 	//grades route
 	Route::get('grades', 'GradeController@index')->name('student_grades.index');
-
-	//notification route
-	Route::get('notifications/read', 'NotificationController@read')->name('read_notification');
-	Route::get('notifications/destroy', 'NotificationController@destroy')->name('delete_notifications');
+	//student notification
 	Route::get('notifications', 'NotificationController@index')->name('notifications.index');
 
 });
+
+
+//notification route
+Route::get('notifications/read', 'NotificationController@read')->name('read_notification');
+Route::get('notifications/destroy', 'NotificationController@destroy')->name('delete_notifications');
 
 
 //profile

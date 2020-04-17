@@ -17,7 +17,8 @@ class KlassesSeeder extends Seeder
 	        		'section' => 'a49',
 	        		'subject_code' => 'etron04a',
 	        		'subject_description' => 'Data communication and networking',
-	        		'created_at' => now(),
+	        		'end_date' => now()->addMonths(1),
+                    'created_at' => now(),
 	        		'updated_at' => now(),
         		],
         		[
@@ -25,7 +26,8 @@ class KlassesSeeder extends Seeder
 	        		'section' => 'a49',
 	        		'subject_code' => 'math201',
 	        		'subject_description' => 'College Algebra',
-	        		'created_at' => now(),
+	        		'end_date' => now()->addMonths(1),
+                    'created_at' => now(),
 	        		'updated_at' => now(),
         		],
         		[
@@ -33,7 +35,8 @@ class KlassesSeeder extends Seeder
 	        		'section' => 'a50',
 	        		'subject_code' => 'comso02a',
 	        		'subject_description' => 'Algorithm',
-	        		'created_at' => now(),
+	        		'end_date' => now()->addMonths(1),
+                    'created_at' => now(),
 	        		'updated_at' => now(),
         		],
         ]);

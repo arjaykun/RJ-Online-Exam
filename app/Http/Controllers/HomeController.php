@@ -52,13 +52,14 @@ class HomeController extends Controller
     }
 
     public function home() {
-        $classes = auth()->user()->student_profile->klasses;
+        $classes = auth()->user()->student_profile->klasses->sortByDesc('created_date');
         $classes->load('user');
 
         return view('main.home', compact('classes'));
     }
 
     public function dashboard(\App\Klass $class) {
+        $this->authorize('launch_class', $class);
         return view('main.dashboard', compact('class'));
     }
 

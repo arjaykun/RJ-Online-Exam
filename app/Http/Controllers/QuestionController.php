@@ -23,11 +23,15 @@ class QuestionController extends Controller
 	}
 
     public function store(Test $test) {
-
     	$data = $this->validatedData();
-    	
+
+        $choices = Arr::where($data['choices'], function ($value, $key){
+            return $value['choice'] != null;
+        });
+
+
     	$question = $test->questions()->create($data['question']);
-    	$question->choices()->createMany($data['choices']);
+    	$question->choices()->createMany($choices);
 
     	return back()->with('question_added', 'You have successfully added new question.');
     }
@@ -43,13 +47,20 @@ class QuestionController extends Controller
         $this->authorize('update', $question);
 
         $data = $this->validatedData();
+
+        $choices = Arr::where($data['choices'], function ($value, $key){
+            return $value['choice'] != null;
+        });
+
         $question->update($data['question']);
 
-        // $question->choices()->delete();
-        // $question->choices()->createMany($data['choices']);
-
-        for ($i=0; $i < 4; $i++) { 
-            $question->choices[$i]->update($data['choices'][$i]);
+        for ($i=0; $i < count($choices); $i++) { 
+            $res = $question->choices[$i] ?? null;
+            if($res) {
+                $question->choices[$i]->update($choices[$i]);
+            } else {
+                $question->choices()->create($choices[$i]);
+            } 
         }
 
         return back()->with('question_updated', 'You have successfully updated the question.');
@@ -67,8 +78,11 @@ class QuestionController extends Controller
     private function validatedData() {
         return request()->validate([
             'question.question' => 'required',
-            'choices.*.choice' => 'required',
-            'choices.*.correct' => 'required',
+            'choices.0.choice' => 'required',
+            'choices.1.choice' => 'required',
+            'choices.2.choice' => 'nullable',
+            'choices.3.choice' => 'nullable',
+            'choices.*.correct' => 'nullable',
         ]);
     }
 

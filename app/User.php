@@ -87,4 +87,8 @@ class User extends Authenticatable
         return $this->hasMany(Grade::class);
     }
 
+    public function timer() {
+        return $this->hasMany(TestTimer::class);
+    }
+
 }

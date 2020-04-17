@@ -12,17 +12,19 @@ class TestActivatedNotification extends Notification
     use Queueable;
 
 
-    public $test;
-    public $message;
+    protected $test;
+    protected $message;
+    protected $class;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($test, $message)
+    public function __construct($test, $message, $class)
     {
         $this->test = $test;
         $this->message = $message;
+        $this->class = $class;
     }
 
     /**
@@ -60,7 +62,8 @@ class TestActivatedNotification extends Notification
     {
         return [
             'message' => $this->message,
-            'test' => $this->test
+            'test' => $this->test,
+            'class' => $this->class,
         ];
     }
 }
