@@ -48,9 +48,7 @@ class Klass extends Model
 
     public function student_profiles() {
         return $this->belongsToMany(StudentProfile::class)
-                    ->using(KlassStudentProfile::class)
-                    ->withTimestamps();
-                   
+                    ->withTimestamps();            
     }
 
 

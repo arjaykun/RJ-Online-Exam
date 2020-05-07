@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Facades\App\Repositories\KlassRepository;
 use Facades\App\Repositories\StudentRepository;
 use Illuminate\Http\Request;
+use App\Events\ActivityDoneEvent;
 
 class EnrollmentController extends Controller
 {
@@ -44,6 +45,7 @@ class EnrollmentController extends Controller
 
         //email student when he is enrolled
          logger("An e-mail is sent to {$student->email} of his enrollement to class {$class->subject_full}");
+         event(new ActivityDoneEvent('add', "enrolled student in class, {$class->section} - {$class->subject_full}. "));
 
         return redirect()
                 ->route('enroll_student_to_class', ['class' => $class_id])
@@ -54,6 +56,8 @@ class EnrollmentController extends Controller
         $class = KlassRepository::get($class_id);
         
         $class->students()->detach($student_id);
+
+         event(new ActivityDoneEvent('delete', "unenrolled student in class, {$class->section} - {$class->subject_full}. "));
 
         return back()->with('student_unenrolled', "You have successfully removed the student from the class.");
     }

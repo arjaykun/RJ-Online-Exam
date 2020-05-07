@@ -29,7 +29,7 @@
     <h6 class="m-0 font-weight-bold text-primary">Grades in {{ $test->title }}</h6>
     <div>
        <a href="{{ route('tests.show', ['class'=>$test->klass->id, 'test'=> $test->id]) }}" class="btn btn-primary btn-sm rounded">Back to Test</a>
-        <a href="#" class="btn btn-danger btn-sm rounded">Print to PDF <i class="fas fa-file-pdf ml-1"> </i></a>
+        <a href="{{ route('print-test-grade', ['class'=>$test->klass->id, 'test'=> $test->id]) }}" target="_blank" class="btn btn-danger btn-sm rounded">Print to PDF <i class="fas fa-file-pdf ml-1"> </i></a>
     </div>
   </div>
   <div class="card-body">

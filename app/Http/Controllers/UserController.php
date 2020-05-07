@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\User;
+use App\Events\ActivityDoneEvent;
 
 class UserController extends Controller
 {
@@ -41,6 +42,8 @@ class UserController extends Controller
 		$data['is_staff'] = 1;
 		$user = User::create($data);
 
+		event( new ActivityDoneEvent('add', "added new user, <a href='{$user->user_path()}'>{$user->full_name}</a>"));
+
 		return back()->with('user_added', 'You have successfully created a user. View it <a href="'.$user->user_path() .'">here</a>');
 	}
 
@@ -64,12 +67,16 @@ class UserController extends Controller
 		$this->authorize('update', $user);
 		$user->update($this->validatedData($user->id));
 
+		event( new ActivityDoneEvent('edit', "updated user, <a href='{$user->user_path()}'>{$user->full_name}</a>"));
+
 		return back()->with('user_updated', 'You have successfully updated a user. View it <a href="'.$user->user_path() .'">here</a>');
 	}
 
 	public function destroy(User $user) {
 		$this->authorize('delete', $user);
 		$user->delete();
+
+		event( new ActivityDoneEvent('delete', "deleted user, {$user->full_name}"));
 
 		return redirect()
 						->route('users.index')

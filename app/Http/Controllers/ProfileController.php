@@ -64,5 +64,35 @@ class ProfileController extends Controller
         return redirect('/profile')->with('password_changed', 'You have successfully changed your password');
     }
 
+    //student
+    public function student_profile(\App\Klass $class) {
+        $user = auth()->user();
+        $user->load('student_profile.course'); 
+
+        return view('main.profile.show', compact('user', 'class'));       
+    }
+
+     public function student_edit_password(\App\Klass $class) {
+         
+       return view('auth.edit_password', compact('class'));
+    }
+
+     public function student_change_password(Request $request, \App\Klass $class, \App\User $user ) {
+   
+        $data = $request->validate([
+            'old_password' => 'required|password',
+            'password' => 'required|min:6|confirmed'
+        ]);
+        
+        $user->update([
+            'password' =>  Hash::make($data['password']),
+        ]);
+
+
+        Auth::logoutOtherDevices($data['password']);
+
+        return redirect()->route('student_profile', ['class'=>$class->id])->with('password_changed', 'You have successfully changed your password');
+    }
+
 
 }

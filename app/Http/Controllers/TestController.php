@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Test;
 use App\Klass;
-
+use App\Events\ActivityDoneEvent;
 
 class TestController extends Controller
 {
@@ -33,7 +33,9 @@ class TestController extends Controller
      */
     public function store(Klass $class)
     {
-        $class->tests()->create($this->validatedData());
+        $test = $class->tests()->create($this->validatedData());
+
+        event( new ActivityDoneEvent('add', "added new test, <a href='{$test->path()}'>{$test->title}</a>."));
 
         return redirect()->route('classes.show', ['class' => $class->id])
                     ->with('test_added', 'You have successfully added a new test.');
@@ -78,10 +80,12 @@ class TestController extends Controller
     public function update(Klass $class, Test $test)
     {
         $this->authorize('update', $test);
-       $test->update($this->validatedData());
+        $test->update($this->validatedData());
 
-       return redirect()->route('tests.show', ['class' => $class->id, 'test' => $test->id])
-                    ->with('test_updated', 'You have successfully updated a test.');
+        event( new ActivityDoneEvent('edit', "updated test, <a href='{$test->path()}'>{$test->title}</a>."));
+
+        return redirect()->route('tests.show', ['class' => $class->id, 'test' => $test->id])
+                ->with('test_updated', 'You have successfully updated a test.');
     }
 
     /**
@@ -94,6 +98,9 @@ class TestController extends Controller
     {
         $this->authorize('delete', $test);
         $test->delete();
+
+        event( new ActivityDoneEvent('delelte', "deleted test."));
+
         return redirect()->route('classes.show', ['class' => $class->id])
                     ->with('test_deleted', 'You have successfully deleted a test.');
     }

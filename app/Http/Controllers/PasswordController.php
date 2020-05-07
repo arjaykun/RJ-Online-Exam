@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\User;
+use App\Events\ActivityDoneEvent;
 
 class PasswordController extends Controller
 {
@@ -18,7 +19,7 @@ class PasswordController extends Controller
 
 
     public function update_password($id) {
-      
+
         $user = User::find($id);
 
         $this->authorize('update', $user);
@@ -30,6 +31,8 @@ class PasswordController extends Controller
         $user->update([
             'password' =>  Hash::make($data['password']),
         ]);
+
+        event( new ActivityDoneEvent('update', "updated the password of ". ($user->is_student ? 'student' : 'user') . ", <a href='". ($user->is_student ? $user->student_path() : $user->user_path() ) ."'>{$user->full_name}</a>"));
 
         if ($user->is_student) {
         	  return redirect()

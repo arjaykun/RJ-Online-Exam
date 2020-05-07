@@ -2,12 +2,12 @@
 
 @section('content')
 
-  <h1>Notifications</h1>
+  <h1 class="mb-4">Notifications</h1>
   @if (auth()->user()->notifications->count() > 0)
     
     @foreach (auth()->user()->notifications as $notification)
     
-    <div class="card">
+    <div class="card mt-2">
       <a class="dropdown-item d-flex align-items-center" 
 
           @if($notification->type == "App\Notifications\TestActivatedNotification" ) href="{{route('test_grades', ['class'=> 1, 'test' => $notification->data['test'] ]) }}" @endif

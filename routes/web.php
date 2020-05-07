@@ -65,6 +65,15 @@ Route::prefix('/admin')->group(function () {
 	//admin notification
 	Route::get('notifications', 'NotificationController@admin_index')->name('notifications.admin_index');
 
+	//activites
+	Route::get('activities', 'ActivityController@index')->name('activities.index');
+	Route::delete('activities', 'ActivityController@destroy')->name('activities.destroy');
+
+	//print grade
+	ROute::get('classes/{class}/tests/{test}/grades/print', 'PDFController@print_test_grade')->name('print-test-grade');
+
+	ROute::get('classes/{class}/grades/print', 'PDFController@print_class_grade')->name('print-class-grade');
+
 });
 
 //main routes for students
@@ -84,6 +93,15 @@ Route::prefix('/{class}')->group( function() {
 	Route::get('grades', 'GradeController@index')->name('student_grades.index');
 	//student notification
 	Route::get('notifications', 'NotificationController@index')->name('notifications.index');
+
+	Route::get('profile', 'ProfileController@student_profile')->name('student_profile');
+	
+	Route::get('profile/edit', 'ProfileController@student_edit')->middleware('password.confirm');
+
+	Route::get('profile/edit-password', 'ProfileController@student_edit_password')->name('student-edit-password');
+
+		Route::put('{user}/change-password', 'ProfileController@student_change_password')->name('student_update_password');
+
 
 });
 

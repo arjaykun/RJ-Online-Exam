@@ -29,7 +29,7 @@
     <h6 class="m-0 font-weight-bold text-primary">Grades of {{ $class->section }}</h6>
     <div>
        <a href="{{ route('classes.index')}} " class="btn btn-primary btn-sm rounded">Back to Class</a>
-        <a href="#" class="btn btn-danger btn-sm rounded">Print to PDF <i class="fas fa-file-pdf ml-1"> </i></a>
+        <a href="{{ route('print-class-grade', ['class' => $class]) }}" class="btn btn-danger btn-sm rounded" target="_blank">Print to PDF <i class="fas fa-file-pdf ml-1"> </i></a>
     </div>
   </div>
   <div class="card-body">

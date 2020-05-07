@@ -55,11 +55,23 @@ class HomeController extends Controller
         $classes = auth()->user()->student_profile->klasses->sortByDesc('created_date');
         $classes->load('user');
 
+
         return view('main.home', compact('classes'));
     }
 
-    public function dashboard(\App\Klass $class) {
+    public function dashboard(Request $request, \App\Klass $class) {
         $this->authorize('launch_class', $class);
+
+        $class->loadCount([
+            'tests', 
+            'tests as activated_tests' => function($query) {
+                $query->where('deadline', '>', now());
+            },
+            'grades as completed_tests' => function($query) use($request){
+                $query->where('user_id', $request->user()->id);
+            },
+        ]);
+
         return view('main.dashboard', compact('class'));
     }
 

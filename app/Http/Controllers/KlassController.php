@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Klass;
 use Facades\App\Repositories\KlassRepository;
+use App\Events\ActivityDoneEvent;
 
 class KlassController extends Controller
 {
@@ -49,6 +50,7 @@ class KlassController extends Controller
 
        $class = auth()->user()->klasses()->create($this->validatedData());
 
+       event(new ActivityDoneEvent('add', "added new class, <a href='{$class->path()}'>{$class->section} - {$class->subject_full}</a>."));
 
        return back()->with('class_added', 'You have successfully added a new class. View it <a href="' . $class->path() . '">here</a>');
     }
@@ -99,7 +101,9 @@ class KlassController extends Controller
 
         $class->update($this->validatedData());
 
-        return back()->with('class_updated', 'You have successfully updated a class. View it <a href="' . $class->path() . '">here</a>');
+        event(new ActivityDoneEvent('edit', "updated class, <a href='{$class->path()}'>{$class->section} - {$class->subject_full}</a>"));
+
+        return back()->with('class_updated', 'You have successfully updated a class. View it <a href="' . $class->path() . '">here</a>.');
     }
 
     /**
@@ -114,11 +118,14 @@ class KlassController extends Controller
 
         $this->authorize('delete', $class);
 
+        $class_temp ="{$class->section} - {$class->subject_full}";
         //delete cascade
         $class->delete();
 
+        event(new ActivityDoneEvent('delete', "deleted class, {$class_temp}."));
+
         return redirect()
-                ->route('klasses.index')
+                ->route('classes.index')
                 ->with('class_deleted', 'You have successfully deleted a class.');
 
     }

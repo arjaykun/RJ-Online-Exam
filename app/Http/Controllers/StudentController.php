@@ -8,6 +8,7 @@ use Facades\App\Repositories\StudentRepository;
 use App\Events\StudentCreated;
 use App\User;
 use App\StudentProfile;
+use App\Events\ActivityDoneEvent;
 
 class StudentController extends Controller
 {
@@ -67,6 +68,9 @@ class StudentController extends Controller
         //send the password to the student email
         // event(new StudentCreated($student, $unhasedPassword));
         logger("An e-mail is sent to {$user->email} of his password {$unhasedPassword}");
+        $route = route('students.show', ['student' => $user->student_profile->id]);
+        event( new ActivityDoneEvent('add', "created student, <a href='{$route}'>{$user->full_name}</a>"));
+
 
         return back()
                 ->with('student_added', 'You have successfully added a new student. View it <a href="'.$user->student_path() .'">here</a>');
@@ -83,8 +87,8 @@ class StudentController extends Controller
         $this->authorize('view', StudentProfile::class);
         $student = StudentRepository::get($id);
      
-        $student->load('student_profile.klasses','student_profile.course' );
-    
+        $student->loadMissing('student_profile.klasses','student_profile.course' );
+
         return view('student.show', compact('student'));
     }
 
@@ -124,6 +128,10 @@ class StudentController extends Controller
         $student->update($data['user']);
         $student->student_profile()->update($data['student']);
 
+        $route = route('students.show', ['student' => $student->id]);
+        event( new ActivityDoneEvent('edit', "updated student, <a href='{$route}'>{$student->full_name}</a>"));
+
+
          return redirect()
                      ->route('students.show', ['student' => $student->id ])
                      ->with('student_updated', 'You have successfully updated this student.');
@@ -143,7 +151,9 @@ class StudentController extends Controller
         $student->student_profile()->delete();
         $student->delete();
 
-          return redirect()
+        event( new ActivityDoneEvent('delete', "deleted student, $student->full_name"));
+
+        return redirect()
                      ->route('students.index')
                      ->with('student_deleted', 'You have successfully deleted a student.');
     }

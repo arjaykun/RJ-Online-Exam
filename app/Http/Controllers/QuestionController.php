@@ -6,6 +6,7 @@ use App\Question;
 use App\Test;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use App\Events\ActivityDoneEvent;
 
 class QuestionController extends Controller
 {
@@ -32,6 +33,8 @@ class QuestionController extends Controller
 
     	$question = $test->questions()->create($data['question']);
     	$question->choices()->createMany($choices);
+
+        event( new ActivityDoneEvent('add', "added new question in test, <a href='{$test->path()}'>{$test->title}</a>."));
 
     	return back()->with('question_added', 'You have successfully added new question.');
     }
@@ -63,6 +66,9 @@ class QuestionController extends Controller
             } 
         }
 
+        event( new ActivityDoneEvent('edit', "updated a question in test, <a href='{$test->path()}'>{$test->title}</a>."));
+
+
         return back()->with('question_updated', 'You have successfully updated the question.');
     }
 
@@ -71,6 +77,8 @@ class QuestionController extends Controller
 
         $question->choices()->delete();
         $question->delete();
+
+        event( new ActivityDoneEvent('delete', "deleted new question in test, <a href='{$test->path()}'>{$test->title}</a>."));
 
         return back()->with('question_deleted', 'You have successfully deleted the question.');
     }

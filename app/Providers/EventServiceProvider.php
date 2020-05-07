@@ -21,8 +21,8 @@ class EventServiceProvider extends ServiceProvider
         \App\Events\StudentCreated::class => [
             \App\Listeners\StudentEmailNotification::class,
         ],
-        \App\Events\TestActivatedEvent::class => [
-            \App\Listeners\TestActivationNotificationListener::class,
+        \App\Events\ActivityDoneEvent::class => [
+            \App\Listeners\CreateActivityListener::class,
         ],
     ];
 
@@ -34,7 +34,5 @@ class EventServiceProvider extends ServiceProvider
     public function boot()
     {
         parent::boot();
-
-        //
     }
 }

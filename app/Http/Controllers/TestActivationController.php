@@ -7,7 +7,7 @@ use App\Test;
 use App\Klass;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\TestActivatedNotification;
-
+use App\Events\ActivityDoneEvent;
 
 class TestActivationController extends Controller
 {
@@ -31,6 +31,8 @@ class TestActivationController extends Controller
         // event( new \App\Events\TestActivatedEvent($test, $class->students));
         Notification::send($this->getUsersInClass($class), new TestActivatedNotification($test->id, $notification, $class->id));
         
+         event( new ActivityDoneEvent('activate', "activated test, <a href='{$test->path()}'>{$test->title}</a> from {$test->created_at->format('M d, Y h:i a')} until {$test->deadline->format('M d, Y h:i a')}."));
+
         return redirect()
                     ->route('tests.show', ['class' => $class->id, 'test' => $test->id])
                     ->with("test_activated", "You have successfully activated the test {$test->title}.");

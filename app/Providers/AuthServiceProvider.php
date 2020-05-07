@@ -30,7 +30,7 @@ class AuthServiceProvider extends ServiceProvider
 
 
         Gate::define('activate-test', function($user, $test) {
-            return ($user->id == $test->klass->user_id || $user->is_superadmin) && $test->active == 0;
+            return ($user->id == $test->klass->user_id || $user->is_superadmin) && $test->active == 0 && ($test->questions->count() > 0);
         });
 
         Gate::define('enroll_student', function($user, $class) {

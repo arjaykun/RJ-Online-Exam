@@ -17,8 +17,12 @@ class StudentProfile extends Model
     }
 
     public function klasses() {
-    	return $this->belongsToMany(Klass::class)
-                    ->using(KlassStudentProfile::class)
+	return $this->belongsToMany(Klass::class)
                     ->withTimestamps();
     }
+
+    public function grades() {
+        $this->hasManyThrough(Grade::class, User::class);
+    }
+
 }

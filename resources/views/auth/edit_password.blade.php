@@ -11,7 +11,7 @@
   </div>
   <div class="card-body">
 
-    <form action="{{ route('update_password', ['user' => auth()->user()->id]) }}" method="POST">
+    <form action="{{ route('student_update_password', ['user' => auth()->user()->id, 'class' => $class->id ]) }}" method="POST">
         @csrf
         @method('PUT')
 

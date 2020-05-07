@@ -83,8 +83,12 @@ class User extends Authenticatable
         return $this->hasManyThrough(Test::class, Klass::class);
     }
 
-     public function grades() {
+    public function grades() {
         return $this->hasMany(Grade::class);
+    }
+
+    public function activities() {
+        return $this->hasMany(Activity::class);
     }
 
     public function timer() {

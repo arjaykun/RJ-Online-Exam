@@ -66,7 +66,7 @@ class StudentTestController extends Controller
 
       //send notification to instructor
       $message = "{$user->full_name} has completed {$test->title} with grade of {$grade->grade}%.";
-      $class->user->notify( new TestDoneNotification($message, $test->id, $user->id));
+      $class->user->notify( new TestDoneNotification($message, $class->id, $test->id, $user->id));
 
       return redirect()
                 ->route('grade_assessment', ['class' => $class->id, 'test' => $test->id, 'grade' => $grade->id]);
